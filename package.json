@@ -1,0 +1,24 @@
+{
+  "name": "koaauth",
+  "version": "1.0.0",
+  "description": "Practicing Koa with authentication with authorization using various methods like",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abuzarshabab/KoaAuth.git"
+  },
+  "author": "Abuzar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abuzarshabab/KoaAuth/issues"
+  },
+  "homepage": "https://github.com/abuzarshabab/KoaAuth#readme",
+  "dependencies": {
+    "koa": "^2.13.4",
+    "koa-router": "^12.0.0",
+    "mongodb": "^4.10.0"
+  }
+}
