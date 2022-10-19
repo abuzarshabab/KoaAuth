@@ -1,4 +1,4 @@
-const { getTransporter } = require("../libraries/mail");
+const { getTransporter } = require("../libraries/gmailAuth");
 
 sendEmail = async ({ emailSubject, recipientEmailId, recipientText, recipientHtml }) => {
   return new Promise(async (resolve, reject) => {

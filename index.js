@@ -1,7 +1,8 @@
 const Koa = require('koa')
-const router = require('koa-router')()
+const indexPageRouter = require('koa-router')()
 const bodyParser = require('koa-bodyparser')
 const render = require('koa-ejs')
+const jwt = require('koa-jwt')
 const path = require('path')
 require('dotenv').config()
 
@@ -11,16 +12,28 @@ const { mongodbCreateConnection } = require('./database/db')
 const { registerRoutes } = require('./routes/register')
 const { resourceNotFound } = require('./middleware/resourceNotFound')
 
+mongodbCreateConnection()
+
 const app = new Koa()
 
 /* Attaching global try catch  */
 app.use(errorHandler)
 app.use(bodyParser())
 
-app.use(router.routes())
+app.use(indexPageRouter.allowedMethods())
 app.use(loginRoutes.routes())
 app.use(registerRoutes.routes())
-app.use(router.allowedMethods())
+
+// * Apart from above all below lines will be protected * //
+app.use(jwt({ secret: process.env.JWT_SECRET }))
+app.use(indexPageRouter.routes())
+
+
+indexPageRouter.get('/hello', (context) => {
+  console.log('The server is ready  ')
+  console.log(context.state)
+  context.body = { message : "You are authorized to access this "}
+})
 
 
 render(app, {
@@ -31,12 +44,10 @@ render(app, {
   debug: false
 })
 
-
 /* Attaching handler for handling un-registered routes */
 app.use(resourceNotFound)
 
 /* Connecting with MongoDB */
-mongodbCreateConnection()
 
 /* Starting listening on port */
 app.listen(process.env.SERVER_PORT, () => {
@@ -44,7 +55,7 @@ app.listen(process.env.SERVER_PORT, () => {
 })
 
 
-/* For handling uncaughtException that is occuerred */
+/* For handling uncaughtException that is occurred */
 process.on('uncaughtException', (exception) => {
   console.log('uncaughtException ===>>>', exception)
 })
